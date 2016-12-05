@@ -80,11 +80,9 @@ public class Day01 {
                 dir = dir.turn(false);
             }
             dir.move(pos, Integer.parseInt(s.substring(1)));
-            if (firstIntersection != null) {
-                break;
-            }
         }
         
-        System.out.println(firstIntersection == null ? pos.distance() : firstIntersection.distance());
+        System.out.println("Part 1: " + pos.distance());
+        System.out.println("Part 2: " + (firstIntersection == null ? pos.distance() : firstIntersection.distance()));
     }
 }
