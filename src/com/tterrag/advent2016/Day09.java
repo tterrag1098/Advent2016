@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class Day09 {
 
-    private static final Pattern MARKER_PATTERN = Pattern.compile("\\((\\d+x\\d+)\\)");
+    private static final Pattern MARKER_PATTERN = Pattern.compile("\\((\\d+)x(\\d+)\\)");
     
     public static void main(String[] args) throws IOException {
         String input = Files.readAllLines(Paths.get("day9.txt")).get(0);
@@ -18,9 +18,7 @@ public class Day09 {
         Matcher matcher = MARKER_PATTERN.matcher(uncompressed);
         int start = 0;
         while (matcher.find(start)) {
-            String[] instruction = matcher.group(1).split("x");
-            int chars = Integer.parseInt(instruction[0]);
-            int repeat = Integer.parseInt(instruction[1]);
+            int chars = Integer.parseInt(matcher.group(1)), repeat = Integer.parseInt(matcher.group(2));
             String toRepeat = uncompressed.substring(matcher.end(), matcher.end() + chars);
             String replacement = toRepeat;
             for (int i = 1; i < repeat; i++) {
@@ -41,9 +39,7 @@ public class Day09 {
         matcher.find();
         try {
             while (matcher.end() < end) {
-                String[] instruction = matcher.group(1).split("x");
-                int chars = Integer.parseInt(instruction[0]);
-                int repeat = Integer.parseInt(instruction[1]);
+                int chars = Integer.parseInt(matcher.group(1)), repeat = Integer.parseInt(matcher.group(2));
                 size += matcher.start() - start;
                 start = matcher.end() + chars;
                 size += getUncompressedLength(matcher, matcher.end(), matcher.end() + chars) * repeat;
