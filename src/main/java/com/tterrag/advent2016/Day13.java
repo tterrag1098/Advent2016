@@ -102,8 +102,8 @@ public class Day13 {
         }
         
         delay = 3;
-        for (int x = 0; x <= maxX; x++) {
-            for (int y = 0; y <= maxY; y++) {
+        for (int x = 0; x <= maxX + 1; x++) {
+            for (int y = 0; y <= maxY + 1; y++) {
                 Node n = new Node(x, y);
                 if (!seen.contains(n)) {
                     draw(x, y, n.isOpen() ? ' ' : '#');
