@@ -58,23 +58,32 @@ public class Day14 {
         
         MessageDigest hasher = MessageDigest.getInstance("MD5");
 
-        while (keys.size() < 64) {
-            String hashstr = String.format("%016x", ByteBuffer.wrap(hasher.digest((salt + pos).getBytes())).getLong());
-            
+        while (true) {
+            String hashstr = salt + pos;
+            for (int i = 0; i <= 2016; i++) {
+                ByteBuffer buf = ByteBuffer.wrap(hasher.digest(hashstr.getBytes()));
+                hashstr = String.format("%016x%016x", buf.getLong(), buf.getLong());
+            }
             int test = pos;
             matches.removeIf(m -> m.expired(test));
-            List<Match> found = matches.stream().filter(m -> m.test(hashstr)).collect(Collectors.toList());
+            String teststr = hashstr;
+            List<Match> found = matches.stream().filter(m -> m.test(teststr)).collect(Collectors.toList());
             matches.removeAll(found);
             keys.addAll(found);
             
+            if (keys.size() >= 64 && matches.isEmpty()) {
+                break;
+            }
+            
             Matcher matcher = TRIPLE_PATTERN.matcher(hashstr);
-            if (matcher.find()) {
+            if (keys.size() < 64 && matcher.find()) {
                 matches.add(new Match(hashstr, matcher.group().charAt(0), pos));
             }
             
             pos++;
         }
         
+        while (keys.size() > 64) keys.pollLast();
         System.out.println(keys.last().pos);
     }
 }
